@@ -137,3 +137,19 @@ print(correlation_matrix)
 pairs(weather_data[, c("precipitation", "temp_max", "temp_min", "wind")], 
       main = "Scatter Plot Matrix",
       col = weather_data$weather)
+
+# Perform ANOVA for precipitation across different weather types
+anova_precipitation <- aov(precipitation ~ weather, data = weather_data)
+summary(anova_precipitation)
+
+# Perform ANOVA for temp_max across different weather types
+anova_temp_max <- aov(temp_max ~ weather, data = weather_data)
+summary(anova_temp_max)
+
+# Perform ANOVA for temp_min across different weather types
+anova_temp_min <- aov(temp_min ~ weather, data = weather_data)
+summary(anova_temp_min)
+
+# Perform ANOVA for wind across different weather types
+anova_wind <- aov(wind ~ weather, data = weather_data)
+summary(anova_wind)
