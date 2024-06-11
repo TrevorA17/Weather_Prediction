@@ -52,3 +52,34 @@ model <- train(precipitation ~ temp_max + temp_min + wind, data = train_data,
 
 # Print cross-validation results
 print(model)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Define train control for cross-validation
+train_control <- trainControl(method = "cv", number = 10)
+
+# Train a decision tree model
+dt_model <- train(weather ~ ., data = train_data, method = "rpart", trControl = train_control)
+
+# Print the model summary
+print(dt_model)
+
+# Evaluate the model on the test set
+dt_predictions <- predict(dt_model, newdata = test_data)
+dt_conf_matrix <- confusionMatrix(dt_predictions, test_data$weather)
+print(dt_conf_matrix)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Train a random forest model
+rf_model <- train(weather ~ ., data = train_data, method = "rf", trControl = train_control)
+
+# Print the model summary
+print(rf_model)
+
+# Evaluate the model on the test set
+rf_predictions <- predict(rf_model, newdata = test_data)
+rf_conf_matrix <- confusionMatrix(rf_predictions, test_data$weather)
+print(rf_conf_matrix)
