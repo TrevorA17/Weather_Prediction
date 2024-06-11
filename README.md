@@ -1,2 +1,2 @@
-# Weather_Prediction
-Predicting it will Rain or not using some Weather Conditons.
+# Weather Prediction
+Welcome to my Traffic and Weather Prediction Project! The goal of this project is to deliver accurate predictions for both traffic situations and weather conditions. Utilizing machine learning techniques, I've developed models capable of forecasting traffic congestion levels based on various factors such as time of day, day of the week, and vehicle counts. Additionally, my weather prediction model utilizes historical weather data to forecast precipitation, temperature, and wind speed. To interact with my models, I offer easy-to-use APIs that enable users to make predictions in real-time. Whether you're planning your commute or preparing for outdoor activities, my project aims to provide valuable insights to enhance your decision-making process. I hope you find my project useful and informative!
