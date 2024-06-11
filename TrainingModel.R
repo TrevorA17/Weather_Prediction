@@ -39,3 +39,16 @@ bootstrap_results <- boot(data = train_data, statistic = boot_fn, R = 1000)
 
 # Print bootstrap results
 print(bootstrap_results)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Define a train control object for k-fold cross-validation
+train_control <- trainControl(method = "cv", number = 10)
+
+# Train a model using cross-validation
+model <- train(precipitation ~ temp_max + temp_min + wind, data = train_data,
+               method = "lm", trControl = train_control)
+
+# Print cross-validation results
+print(model)
