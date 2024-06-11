@@ -153,3 +153,20 @@ summary(anova_temp_min)
 # Perform ANOVA for wind across different weather types
 anova_wind <- aov(wind ~ weather, data = weather_data)
 summary(anova_wind)
+
+# Post-hoc test for precipitation
+tukey_precipitation <- TukeyHSD(anova_precipitation)
+print(tukey_precipitation)
+
+# Post-hoc test for temp_max
+tukey_temp_max <- TukeyHSD(anova_temp_max)
+print(tukey_temp_max)
+
+# Post-hoc test for temp_min
+tukey_temp_min <- TukeyHSD(anova_temp_min)
+print(tukey_temp_min)
+
+# Post-hoc test for wind
+tukey_wind <- TukeyHSD(anova_wind)
+print(tukey_wind)
+
