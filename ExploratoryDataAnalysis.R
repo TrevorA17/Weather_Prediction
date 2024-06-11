@@ -170,3 +170,24 @@ print(tukey_temp_min)
 tukey_wind <- TukeyHSD(anova_wind)
 print(tukey_wind)
 
+library(ggplot2)
+# Boxplot for precipitation
+ggplot(weather_data, aes(x = weather, y = precipitation)) +
+  geom_boxplot() +
+  labs(title = "Precipitation by Weather Type", x = "Weather", y = "Precipitation")
+
+# Boxplot for temp_max
+ggplot(weather_data, aes(x = weather, y = temp_max)) +
+  geom_boxplot() +
+  labs(title = "Max Temperature by Weather Type", x = "Weather", y = "Max Temperature")
+
+# Boxplot for temp_min
+ggplot(weather_data, aes(x = weather, y = temp_min)) +
+  geom_boxplot() +
+  labs(title = "Min Temperature by Weather Type", x = "Weather", y = "Min Temperature")
+
+# Boxplot for wind
+ggplot(weather_data, aes(x = weather, y = wind)) +
+  geom_boxplot() +
+  labs(title = "Wind Speed by Weather Type", x = "Weather", y = "Wind Speed")
+
