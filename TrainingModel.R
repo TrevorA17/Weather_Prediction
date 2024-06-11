@@ -103,3 +103,9 @@ print(svm_model)
 svm_predictions <- predict(svm_model, newdata = test_data)
 svm_conf_matrix <- confusionMatrix(svm_predictions, test_data$weather)
 print(svm_conf_matrix)
+
+# Compare model performance using resamples
+model_comparison <- resamples(list(DecisionTree = dt_model, RandomForest = rf_model, SVM = svm_model))
+
+# Summarize results
+summary(model_comparison)
