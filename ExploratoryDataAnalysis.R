@@ -191,3 +191,71 @@ ggplot(weather_data, aes(x = weather, y = wind)) +
   geom_boxplot() +
   labs(title = "Wind Speed by Weather Type", x = "Weather", y = "Wind Speed")
 
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Histogram for precipitation
+ggplot(weather_data, aes(x = precipitation)) +
+  geom_histogram(binwidth = 1, fill = "blue", color = "black") +
+  labs(title = "Histogram of Precipitation", x = "Precipitation", y = "Frequency")
+
+# Histogram for temp_max
+ggplot(weather_data, aes(x = temp_max)) +
+  geom_histogram(binwidth = 1, fill = "red", color = "black") +
+  labs(title = "Histogram of Max Temperature", x = "Max Temperature", y = "Frequency")
+
+# Histogram for temp_min
+ggplot(weather_data, aes(x = temp_min)) +
+  geom_histogram(binwidth = 1, fill = "green", color = "black") +
+  labs(title = "Histogram of Min Temperature", x = "Min Temperature", y = "Frequency")
+
+# Histogram for wind
+ggplot(weather_data, aes(x = wind)) +
+  geom_histogram(binwidth = 1, fill = "purple", color = "black") +
+  labs(title = "Histogram of Wind Speed", x = "Wind Speed", y = "Frequency")
+
+# Boxplot for precipitation
+ggplot(weather_data, aes(x = "", y = precipitation)) +
+  geom_boxplot(fill = "blue") +
+  labs(title = "Boxplot of Precipitation", x = "", y = "Precipitation")
+
+# Boxplot for temp_max
+ggplot(weather_data, aes(x = "", y = temp_max)) +
+  geom_boxplot(fill = "red") +
+  labs(title = "Boxplot of Max Temperature", x = "", y = "Max Temperature")
+
+# Boxplot for temp_min
+ggplot(weather_data, aes(x = "", y = temp_min)) +
+  geom_boxplot(fill = "green") +
+  labs(title = "Boxplot of Min Temperature", x = "", y = "Min Temperature")
+
+# Boxplot for wind
+ggplot(weather_data, aes(x = "", y = wind)) +
+  geom_boxplot(fill = "purple") +
+  labs(title = "Boxplot of Wind Speed", x = "", y = "Wind Speed")
+
+# Scatter plot for temp_max vs temp_min
+ggplot(weather_data, aes(x = temp_min, y = temp_max, color = weather)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Max Temp vs Min Temp", x = "Min Temperature", y = "Max Temperature")
+
+# Scatter plot for temp_max vs wind
+ggplot(weather_data, aes(x = wind, y = temp_max, color = weather)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Max Temp vs Wind", x = "Wind Speed", y = "Max Temperature")
+
+# Scatter plot for precipitation vs wind
+ggplot(weather_data, aes(x = wind, y = precipitation, color = weather)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Precipitation vs Wind", x = "Wind Speed", y = "Precipitation")
+
+# Install and load GGally if not already installed
+if (!require(GGally)) install.packages("GGally")
+library(GGally)
+
+# Pair plot for all numeric variables
+ggpairs(weather_data, columns = c("precipitation", "temp_max", "temp_min", "wind"), 
+        mapping = aes(color = weather),
+        title = "Pair Plot of Weather Data")
+
