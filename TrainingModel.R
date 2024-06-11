@@ -23,3 +23,19 @@ test_data <- weather_data[-train_index, ]
 # Display the dimensions of the training and testing sets
 dim(train_data)
 dim(test_data)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Define a function for bootstrapping
+boot_fn <- function(data, indices) {
+  d <- data[indices, ]  # Select bootstrap sample
+  fit <- lm(precipitation ~ temp_max + temp_min + wind, data = d)
+  return(coef(fit))
+}
+
+# Perform bootstrapping with 1000 replicates
+bootstrap_results <- boot(data = train_data, statistic = boot_fn, R = 1000)
+
+# Print bootstrap results
+print(bootstrap_results)
