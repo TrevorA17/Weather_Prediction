@@ -40,6 +40,9 @@ bootstrap_results <- boot(data = train_data, statistic = boot_fn, R = 1000)
 # Print bootstrap results
 print(bootstrap_results)
 
+library(randomForest)
+library(e1071) # SVM package
+
 # Set seed for reproducibility
 set.seed(123)
 
@@ -83,3 +86,20 @@ print(rf_model)
 rf_predictions <- predict(rf_model, newdata = test_data)
 rf_conf_matrix <- confusionMatrix(rf_predictions, test_data$weather)
 print(rf_conf_matrix)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Define train control for cross-validation
+train_control <- trainControl(method = "cv", number = 10)
+
+# Train an SVM model
+svm_model <- train(weather ~ ., data = train_data, method = "svmRadial", trControl = train_control)
+
+# Print the model summary
+print(svm_model)
+
+# Evaluate the model on the test set
+svm_predictions <- predict(svm_model, newdata = test_data)
+svm_conf_matrix <- confusionMatrix(svm_predictions, test_data$weather)
+print(svm_conf_matrix)
