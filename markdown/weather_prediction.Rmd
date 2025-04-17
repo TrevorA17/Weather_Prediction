@@ -1,0 +1,485 @@
+---
+title: "Weather Prediction"
+author: "Trevor Okinda"
+date: "2024"
+output:
+  github_document: 
+    toc: yes
+    toc_depth: 4
+    fig_width: 6
+    fig_height: 4
+    df_print: default
+editor_options:
+  chunk_output_type: console
+---
+
+# Student Details
+
+|                                              |     |
+|----------------------------------------------|-----|
+| **Student ID Number**                        | 134780 |
+| **Student Name**                             | Trevor Okinda |
+| **BBIT 4.2 Group**                           | C |
+| **Project Name**                             | Weather Prediction |
+
+# Setup Chunk
+
+**Note:** the following KnitR options have been set as the global defaults: <BR> `knitr::opts_chunk$set(echo = TRUE, warning = FALSE, eval = TRUE, collapse = FALSE, tidy = TRUE)`.
+
+More KnitR options are documented here <https://bookdown.org/yihui/rmarkdown-cookbook/chunk-options.html> and here <https://yihui.org/knitr/options/>.
+
+```{r setup, include=FALSE}
+library(formatR)
+knitr::opts_chunk$set(
+  warning = FALSE,
+  collapse = FALSE
+)
+```
+### Source: 
+
+The dataset that was used can be downloaded here: *\<https://www.kaggle.com/datasets/zaraavagyan/weathercsv/discussion\>*
+
+### Reference:
+
+*\<Avagyan, Z. (2017). Weather CSV [Data set]. Kaggle. https://www.kaggle.com/datasets/zaraavagyan/weathercsv\>\
+Refer to the APA 7th edition manual for rules on how to cite datasets: <https://apastyle.apa.org/style-grammar-guidelines/references/examples/data-set-references>*
+
+# Understanding the Dataset (Exploratory Data Analysis (EDA))
+## Loading the Dataset
+```{r loading dataset}
+# Load necessary library
+library(readr)
+
+# Load dataset
+weather_data <- read.csv("seattle-weather.csv", colClasses = c(
+  precipitation = "numeric",
+  temp_max = "numeric",
+  temp_min = "numeric",
+  wind = "numeric",
+  weather = "factor"
+))
+
+# Display the structure of the dataset
+str(weather_data)
+
+# View the first few rows of the dataset
+head(weather_data)
+
+# View the dataset in a separate viewer window
+View(weather_data)
+```
+
+## Measures of Frequency
+```{r MOF}
+# Measures of Frequency
+
+# Frequency distribution of the 'weather' column
+weather_frequency <- table(weather_data$weather)
+print(weather_frequency)
+
+# Proportions of the 'weather' column
+weather_proportions <- prop.table(weather_frequency)
+print(weather_proportions)
+```
+
+## Measures of Central Tendency
+```{r MOCT}
+# Measures of Central Tendency
+
+# Mean
+mean_precipitation <- mean(weather_data$precipitation, na.rm = TRUE)
+mean_temp_max <- mean(weather_data$temp_max, na.rm = TRUE)
+mean_temp_min <- mean(weather_data$temp_min, na.rm = TRUE)
+mean_wind <- mean(weather_data$wind, na.rm = TRUE)
+
+# Median
+median_precipitation <- median(weather_data$precipitation, na.rm = TRUE)
+median_temp_max <- median(weather_data$temp_max, na.rm = TRUE)
+median_temp_min <- median(weather_data$temp_min, na.rm = TRUE)
+median_wind <- median(weather_data$wind, na.rm = TRUE)
+
+# Mode function (there can be more than one mode)
+get_mode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+mode_precipitation <- get_mode(weather_data$precipitation)
+mode_temp_max <- get_mode(weather_data$temp_max)
+mode_temp_min <- get_mode(weather_data$temp_min)
+mode_wind <- get_mode(weather_data$wind)
+
+# Print the results
+list(
+  mean_precipitation = mean_precipitation,
+  median_precipitation = median_precipitation,
+  mode_precipitation = mode_precipitation,
+  mean_temp_max = mean_temp_max,
+  median_temp_max = median_temp_max,
+  mode_temp_max = mode_temp_max,
+  mean_temp_min = mean_temp_min,
+  median_temp_min = median_temp_min,
+  mode_temp_min = mode_temp_min,
+  mean_wind = mean_wind,
+  median_wind = median_wind,
+  mode_wind = mode_wind
+)
+```
+
+## Measures of Distribution
+```{r MOD}
+# Measures of Distribution
+library(e1071)
+
+# Range
+range_precipitation <- range(weather_data$precipitation, na.rm = TRUE)
+range_temp_max <- range(weather_data$temp_max, na.rm = TRUE)
+range_temp_min <- range(weather_data$temp_min, na.rm = TRUE)
+range_wind <- range(weather_data$wind, na.rm = TRUE)
+
+# Variance
+variance_precipitation <- var(weather_data$precipitation, na.rm = TRUE)
+variance_temp_max <- var(weather_data$temp_max, na.rm = TRUE)
+variance_temp_min <- var(weather_data$temp_min, na.rm = TRUE)
+variance_wind <- var(weather_data$wind, na.rm = TRUE)
+
+# Standard Deviation
+sd_precipitation <- sd(weather_data$precipitation, na.rm = TRUE)
+sd_temp_max <- sd(weather_data$temp_max, na.rm = TRUE)
+sd_temp_min <- sd(weather_data$temp_min, na.rm = TRUE)
+sd_wind <- sd(weather_data$wind, na.rm = TRUE)
+
+# Skewness
+skewness_precipitation <- skewness(weather_data$precipitation, na.rm = TRUE)
+skewness_temp_max <- skewness(weather_data$temp_max, na.rm = TRUE)
+skewness_temp_min <- skewness(weather_data$temp_min, na.rm = TRUE)
+skewness_wind <- skewness(weather_data$wind, na.rm = TRUE)
+
+# Kurtosis
+kurtosis_precipitation <- kurtosis(weather_data$precipitation, na.rm = TRUE)
+kurtosis_temp_max <- kurtosis(weather_data$temp_max, na.rm = TRUE)
+kurtosis_temp_min <- kurtosis(weather_data$temp_min, na.rm = TRUE)
+kurtosis_wind <- kurtosis(weather_data$wind, na.rm = TRUE)
+
+# Print the results
+list(
+  range_precipitation = range_precipitation,
+  variance_precipitation = variance_precipitation,
+  sd_precipitation = sd_precipitation,
+  skewness_precipitation = skewness_precipitation,
+  kurtosis_precipitation = kurtosis_precipitation,
+  range_temp_max = range_temp_max,
+  variance_temp_max = variance_temp_max,
+  sd_temp_max = sd_temp_max,
+  skewness_temp_max = skewness_temp_max,
+  kurtosis_temp_max = kurtosis_temp_max,
+  range_temp_min = range_temp_min,
+  variance_temp_min = variance_temp_min,
+  sd_temp_min = sd_temp_min,
+  skewness_temp_min = skewness_temp_min,
+  kurtosis_temp_min = kurtosis_temp_min,
+  range_wind = range_wind,
+  variance_wind = variance_wind,
+  sd_wind = sd_wind,
+  skewness_wind = skewness_wind,
+  kurtosis_wind = kurtosis_wind
+)
+
+```
+
+## Measures of Relationship
+```{r MOR}
+# Measures of Relationship
+
+# Correlation matrix for numeric columns
+correlation_matrix <- cor(weather_data[, c("precipitation", "temp_max", "temp_min", "wind")], use = "complete.obs")
+print(correlation_matrix)
+
+# Scatter plot matrix to visualize relationships
+pairs(weather_data[, c("precipitation", "temp_max", "temp_min", "wind")], 
+      main = "Scatter Plot Matrix",
+      col = weather_data$weather)
+```
+
+## ANOVA
+```{r ANOVA}
+# Perform ANOVA for precipitation across different weather types
+anova_precipitation <- aov(precipitation ~ weather, data = weather_data)
+summary(anova_precipitation)
+
+# Perform ANOVA for temp_max across different weather types
+anova_temp_max <- aov(temp_max ~ weather, data = weather_data)
+summary(anova_temp_max)
+
+# Perform ANOVA for temp_min across different weather types
+anova_temp_min <- aov(temp_min ~ weather, data = weather_data)
+summary(anova_temp_min)
+
+# Perform ANOVA for wind across different weather types
+anova_wind <- aov(wind ~ weather, data = weather_data)
+summary(anova_wind)
+
+# Post-hoc test for precipitation
+tukey_precipitation <- TukeyHSD(anova_precipitation)
+print(tukey_precipitation)
+
+# Post-hoc test for temp_max
+tukey_temp_max <- TukeyHSD(anova_temp_max)
+print(tukey_temp_max)
+
+# Post-hoc test for temp_min
+tukey_temp_min <- TukeyHSD(anova_temp_min)
+print(tukey_temp_min)
+
+# Post-hoc test for wind
+tukey_wind <- TukeyHSD(anova_wind)
+print(tukey_wind)
+```
+
+## Plots
+```{r Plots}
+library(ggplot2)
+# Boxplot for precipitation
+ggplot(weather_data, aes(x = weather, y = precipitation)) +
+  geom_boxplot() +
+  labs(title = "Precipitation by Weather Type", x = "Weather", y = "Precipitation")
+
+# Boxplot for temp_max
+ggplot(weather_data, aes(x = weather, y = temp_max)) +
+  geom_boxplot() +
+  labs(title = "Max Temperature by Weather Type", x = "Weather", y = "Max Temperature")
+
+# Boxplot for temp_min
+ggplot(weather_data, aes(x = weather, y = temp_min)) +
+  geom_boxplot() +
+  labs(title = "Min Temperature by Weather Type", x = "Weather", y = "Min Temperature")
+
+# Boxplot for wind
+ggplot(weather_data, aes(x = weather, y = wind)) +
+  geom_boxplot() +
+  labs(title = "Wind Speed by Weather Type", x = "Weather", y = "Wind Speed")
+
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Histogram for precipitation
+ggplot(weather_data, aes(x = precipitation)) +
+  geom_histogram(binwidth = 1, fill = "blue", color = "black") +
+  labs(title = "Histogram of Precipitation", x = "Precipitation", y = "Frequency")
+
+# Histogram for temp_max
+ggplot(weather_data, aes(x = temp_max)) +
+  geom_histogram(binwidth = 1, fill = "red", color = "black") +
+  labs(title = "Histogram of Max Temperature", x = "Max Temperature", y = "Frequency")
+
+# Histogram for temp_min
+ggplot(weather_data, aes(x = temp_min)) +
+  geom_histogram(binwidth = 1, fill = "green", color = "black") +
+  labs(title = "Histogram of Min Temperature", x = "Min Temperature", y = "Frequency")
+
+# Histogram for wind
+ggplot(weather_data, aes(x = wind)) +
+  geom_histogram(binwidth = 1, fill = "purple", color = "black") +
+  labs(title = "Histogram of Wind Speed", x = "Wind Speed", y = "Frequency")
+
+# Boxplot for precipitation
+ggplot(weather_data, aes(x = "", y = precipitation)) +
+  geom_boxplot(fill = "blue") +
+  labs(title = "Boxplot of Precipitation", x = "", y = "Precipitation")
+
+# Boxplot for temp_max
+ggplot(weather_data, aes(x = "", y = temp_max)) +
+  geom_boxplot(fill = "red") +
+  labs(title = "Boxplot of Max Temperature", x = "", y = "Max Temperature")
+
+# Boxplot for temp_min
+ggplot(weather_data, aes(x = "", y = temp_min)) +
+  geom_boxplot(fill = "green") +
+  labs(title = "Boxplot of Min Temperature", x = "", y = "Min Temperature")
+
+# Boxplot for wind
+ggplot(weather_data, aes(x = "", y = wind)) +
+  geom_boxplot(fill = "purple") +
+  labs(title = "Boxplot of Wind Speed", x = "", y = "Wind Speed")
+
+# Scatter plot for temp_max vs temp_min
+ggplot(weather_data, aes(x = temp_min, y = temp_max, color = weather)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Max Temp vs Min Temp", x = "Min Temperature", y = "Max Temperature")
+
+# Scatter plot for temp_max vs wind
+ggplot(weather_data, aes(x = wind, y = temp_max, color = weather)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Max Temp vs Wind", x = "Wind Speed", y = "Max Temperature")
+
+# Scatter plot for precipitation vs wind
+ggplot(weather_data, aes(x = wind, y = precipitation, color = weather)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Precipitation vs Wind", x = "Wind Speed", y = "Precipitation")
+
+# Install and load GGally if not already installed
+if (!require(GGally)) install.packages("GGally")
+library(GGally)
+
+# Pair plot for all numeric variables
+ggpairs(weather_data, columns = c("precipitation", "temp_max", "temp_min", "wind"), 
+        mapping = aes(color = weather),
+        title = "Pair Plot of Weather Data")
+
+
+```
+
+# Preprocessing and Data Transformation
+## Missing Values
+```{r Missing Values}
+# Check for missing values in each column
+missing_values_per_column <- colSums(is.na(weather_data))
+print(missing_values_per_column)
+
+# Check for any missing values in the entire dataset
+total_missing_values <- sum(is.na(weather_data))
+print(total_missing_values)
+
+# Percentage of missing values in each column
+missing_values_percentage <- colSums(is.na(weather_data)) / nrow(weather_data) * 100
+print(missing_values_percentage)
+
+```
+
+# Training Model
+## Data Splitting
+```{r Data Splitting}
+library(caret)
+# Set seed for reproducibility
+set.seed(123)
+
+# Split data into training (70%) and testing (30%) sets
+train_index <- createDataPartition(weather_data$weather, p = 0.7, list = FALSE)
+train_data <- weather_data[train_index, ]
+test_data <- weather_data[-train_index, ]
+
+# Display the dimensions of the training and testing sets
+dim(train_data)
+dim(test_data)
+```
+
+## Bootstrapping
+```{r Bootstrapping}
+library(boot)
+# Set seed for reproducibility
+set.seed(123)
+
+# Define a function for bootstrapping
+boot_fn <- function(data, indices) {
+  d <- data[indices, ]  # Select bootstrap sample
+  fit <- lm(precipitation ~ temp_max + temp_min + wind, data = d)
+  return(coef(fit))
+}
+
+# Perform bootstrapping with 1000 replicates
+bootstrap_results <- boot(data = train_data, statistic = boot_fn, R = 1000)
+
+# Print bootstrap results
+print(bootstrap_results)
+```
+
+## Model Training
+```{r Model Training}
+
+library(randomForest)
+library(e1071) # SVM package
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Define a train control object for k-fold cross-validation
+train_control <- trainControl(method = "cv", number = 10)
+
+# Train a model using cross-validation
+model <- train(precipitation ~ temp_max + temp_min + wind, data = train_data,
+               method = "lm", trControl = train_control)
+
+# Print cross-validation results
+print(model)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Define train control for cross-validation
+train_control <- trainControl(method = "cv", number = 10)
+
+# Train a decision tree model
+dt_model <- train(weather ~ ., data = train_data, method = "rpart", trControl = train_control)
+
+# Print the model summary
+print(dt_model)
+
+# Evaluate the model on the test set
+dt_predictions <- predict(dt_model, newdata = test_data)
+dt_conf_matrix <- confusionMatrix(dt_predictions, test_data$weather)
+print(dt_conf_matrix)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Train a random forest model
+rf_model <- train(weather ~ ., data = train_data, method = "rf", trControl = train_control)
+
+# Print the model summary
+print(rf_model)
+
+# Evaluate the model on the test set
+rf_predictions <- predict(rf_model, newdata = test_data)
+rf_conf_matrix <- confusionMatrix(rf_predictions, test_data$weather)
+print(rf_conf_matrix)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Define train control for cross-validation
+train_control <- trainControl(method = "cv", number = 10)
+
+# Train an SVM model
+svm_model <- train(weather ~ ., data = train_data, method = "svmRadial", trControl = train_control)
+
+# Print the model summary
+print(svm_model)
+
+# Evaluate the model on the test set
+svm_predictions <- predict(svm_model, newdata = test_data)
+svm_conf_matrix <- confusionMatrix(svm_predictions, test_data$weather)
+print(svm_conf_matrix)
+```
+
+## Performance Comparison
+```{r Performance Comparison}
+# Compare model performance using resamples
+model_comparison <- resamples(list(DecisionTree = dt_model, RandomForest = rf_model, SVM = svm_model))
+
+# Summarize results
+summary(model_comparison)
+```
+
+# Saving Model
+```{r Saving Model}
+# Load the saved model
+loaded_dt_model <- readRDS("./models/saved_dt_model.rds")
+
+# Prepare new data for prediction
+new_data <- data.frame(
+  precipitation = 0.8,
+  temp_max = 11.7,
+  temp_min = 7.2,
+  wind = 2.3
+)
+
+# Use the loaded model to make predictions
+predictions_loaded_model <- predict(loaded_dt_model, newdata = new_data)
+
+# Print predictions
+print(predictions_loaded_model)
+
+```
+
+
